@@ -13,7 +13,7 @@ import React, {
 } from 'react';
 import { drawingState, derivedPaths, CompletedPoints } from '../../store';
 import { useSnapshot } from 'valtio';
-import { createHistoryStack, createSvgFromPaths } from '../../utils';
+import { createHistoryStack } from '../../utils';
 import type {
   SketchCanvasRef,
   SketchCanvasProps,
@@ -64,11 +64,6 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
         drawingState.currentPoints = value.currentPoints;
         drawingState.completedPoints = value.completedPoints;
       },
-      redo() {
-        const value = stack.redo();
-        drawingState.currentPoints = value.currentPoints;
-        drawingState.completedPoints = value.completedPoints;
-      },
       toBase64: (format, quality) => {
         const image = canvasRef.current?.makeImageSnapshot();
         if (image) {
@@ -81,13 +76,6 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
       },
       toImage: () => {
         return canvasRef.current?.makeImageSnapshot();
-      },
-      toSvg: (width, height, backgroundColor) => {
-        return createSvgFromPaths(derivedPaths.completed, {
-          width,
-          height,
-          backgroundColor,
-        });
       },
       toPath: () => {
         return drawingState.completedPoints;

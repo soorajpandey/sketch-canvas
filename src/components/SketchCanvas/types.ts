@@ -8,10 +8,8 @@ export type StrokeStyle = 'stroke' | 'fill';
 export interface SketchCanvasRef {
   reset: () => void;
   undo: () => void;
-  redo: () => void;
   toBase64: (format?: ImageFormat, quality?: number) => string | undefined;
   toImage: () => SkImage | undefined;
-  toSvg: (width: number, height: number, backgroundColor?: string) => string;
   toPath: () => CompletedPoints[];
   drawPath: (path: CompletedPoints[]) => void;
   withdraw: () => void;
