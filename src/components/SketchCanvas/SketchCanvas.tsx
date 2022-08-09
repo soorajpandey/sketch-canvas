@@ -104,8 +104,20 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
     const touchHandler = useTouchHandler(
       {
         onStart: (touchInfo: TouchInfo) => {
-          drawingState.isDrawing = true;
-          drawingState.currentPoints.points = [[touchInfo.x, touchInfo.y]];
+          try {
+            drawingState.isDrawing = true;
+            drawingState.currentPoints.points = [[touchInfo.x, touchInfo.y]];
+            drawingState.completedPoints.push({
+              id: touchInfo.timestamp,
+              points: [[touchInfo.x, touchInfo.y]],
+              width: strokeWidth,
+              color: strokeColor,
+              style: strokeStyle,
+            });
+            console.log('onStart', drawingState.completedPoints);
+          } catch (error) {
+            console.log(error);
+          }
         },
         onActive: (touchInfo: TouchInfo) => {
           if (!drawingState.isDrawing) {
@@ -116,14 +128,21 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
             ...(drawingState.currentPoints.points ?? []),
             [touchInfo.x, touchInfo.y],
           ];
+          drawingState.completedPoints[
+            drawingState.completedPoints.length - 1
+          ].points = [
+              ...(drawingState.completedPoints[
+                drawingState.completedPoints.length - 1
+              ].points ?? []),
+              [touchInfo.x, touchInfo.y],
+            ];
         },
         onEnd: (touchInfo: TouchInfo) => {
           drawingState.isDrawing = false;
-
           if (!drawingState.currentPoints.points) {
+            console.log('no points');
             return;
           }
-
           drawingState.completedPoints = [
             ...drawingState.completedPoints,
             {
@@ -135,7 +154,6 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
             },
           ];
           drawingState.currentPoints.points = null;
-
           stack.push({
             currentPoints: drawingState.currentPoints,
             completedPoints: drawingState.completedPoints,
