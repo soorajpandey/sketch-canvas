@@ -51,6 +51,14 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
     }, [strokeWidth]);
 
     useImperativeHandle(ref, () => ({
+      reset() {
+        drawingState.currentPoints.points = null;
+        drawingState.completedPoints = [];
+        stack.push({
+          currentPoints: drawingState.currentPoints,
+          completedPoints: drawingState.completedPoints,
+        });
+      },
       undo() {
         const value = stack.undo();
         drawingState.currentPoints = value.currentPoints;

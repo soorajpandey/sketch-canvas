@@ -6,6 +6,7 @@ import type { CompletedPoints } from 'src/store';
 export type StrokeStyle = 'stroke' | 'fill';
 
 export interface SketchCanvasRef {
+  reset: () => void;
   undo: () => void;
   toPath: () => CompletedPoints[];
   drawPath: (path: CompletedPoints[]) => void;
