@@ -1,4 +1,4 @@
-import type { Color, ImageFormat, SkImage } from '@shopify/react-native-skia';
+import type { Color } from '@shopify/react-native-skia';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { CompletedPoints } from 'src/store';
 
