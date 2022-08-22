@@ -51,31 +51,10 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
     }, [strokeWidth]);
 
     useImperativeHandle(ref, () => ({
-      reset() {
-        drawingState.currentPoints.points = null;
-        drawingState.completedPoints = [];
-        stack.push({
-          currentPoints: drawingState.currentPoints,
-          completedPoints: drawingState.completedPoints,
-        });
-      },
       undo() {
         const value = stack.undo();
         drawingState.currentPoints = value.currentPoints;
         drawingState.completedPoints = value.completedPoints;
-      },
-      toBase64: (format, quality) => {
-        const image = canvasRef.current?.makeImageSnapshot();
-        if (image) {
-          return image.encodeToBase64(
-            format,
-            quality,
-          );
-        }
-        return undefined;
-      },
-      toImage: () => {
-        return canvasRef.current?.makeImageSnapshot();
       },
       toPath: () => {
         return drawingState.completedPoints;
@@ -104,20 +83,8 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
     const touchHandler = useTouchHandler(
       {
         onStart: (touchInfo: TouchInfo) => {
-          try {
-            drawingState.isDrawing = true;
-            drawingState.currentPoints.points = [[touchInfo.x, touchInfo.y]];
-            drawingState.completedPoints.push({
-              id: touchInfo.timestamp,
-              points: [[touchInfo.x, touchInfo.y]],
-              width: strokeWidth,
-              color: strokeColor,
-              style: strokeStyle,
-            });
-            console.log('onStart', drawingState.completedPoints);
-          } catch (error) {
-            console.log(error);
-          }
+          drawingState.isDrawing = true;
+          drawingState.currentPoints.points = [[touchInfo.x, touchInfo.y]];
         },
         onActive: (touchInfo: TouchInfo) => {
           if (!drawingState.isDrawing) {
@@ -128,19 +95,10 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
             ...(drawingState.currentPoints.points ?? []),
             [touchInfo.x, touchInfo.y],
           ];
-          drawingState.completedPoints[
-            drawingState.completedPoints.length - 1
-          ].points = [
-              ...(drawingState.completedPoints[
-                drawingState.completedPoints.length - 1
-              ].points ?? []),
-              [touchInfo.x, touchInfo.y],
-            ];
         },
         onEnd: (touchInfo: TouchInfo) => {
           drawingState.isDrawing = false;
           if (!drawingState.currentPoints.points) {
-            console.log('no points');
             return;
           }
           drawingState.completedPoints = [
