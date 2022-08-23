@@ -28,7 +28,7 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
       strokeWidth = STROKE_WIDTH,
       strokeColor = STROKE_COLOR,
       strokeStyle = STROKE_STYLE,
-      onEnd,
+      // onEnd,
       containerStyle,
       children,
       topChildren,
@@ -46,7 +46,7 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
         }),
       []
     );
-    this._onEnd = onEnd;
+    // this._onEnd = onEnd;
 
     useEffect(() => {
       drawingState.currentPoints.width = strokeWidth;
@@ -126,9 +126,9 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
             currentPoints: drawingState.currentPoints,
             completedPoints: drawingState.completedPoints,
           });
-          if(this._onEnd) {
-            this._onEnd();
-          }
+          // if(this._onEnd) {
+          //   this._onEnd();
+          // }
         },
       },
       [strokeColor, strokeStyle]
