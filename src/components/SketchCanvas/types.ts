@@ -1,7 +1,7 @@
 import type { Color } from '@shopify/react-native-skia';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { CompletedPoints } from 'src/store';
-// import type PropTypes from 'prop-types';
+import type PropTypes from 'prop-types';
 
 export type StrokeStyle = 'stroke' | 'fill';
 
@@ -19,11 +19,12 @@ export interface SketchCanvasProps {
   strokeWidth?: number;
   strokeColor?: Color;
   strokeStyle?: 'stroke' | 'fill';
-  // onEnd?: PropTypes.func;
+  onEnd?: typeof PropTypes.func;
   containerStyle?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
   topChildren?: React.ReactNode;
   bottomChildren?: React.ReactNode;
+  eraser?: boolean;
 }
 
 export interface StyleOptions {
